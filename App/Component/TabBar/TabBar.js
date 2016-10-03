@@ -10,7 +10,6 @@ import CustomTabBar from './customTabBar.js';
 class TabBar extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.structure);
     this.state= {
       structure: this.props.structure,
 			selectedTab: this.props.selectedTab,
@@ -23,12 +22,12 @@ class TabBar extends Component {
       <ScrollableTabView renderTabBar={() => <CustomTabBar />}
 								   onChangeTab={(o)=>{}}
                            		   tabBarPosition={'bottom'}
+                                 initialPage={this.state.selectedTab}
                                    >
         {this.state.structure.map((tabProps,tabIndex)=>
                   <View style={{flex:1}}
                         tabLabel={tabProps.title+'!$#'+tabProps.iconName+'!$#'+this.state.iconSize}
                         key={tabIndex}>
-                        <Text>{tabProps.title}</Text>
                         {tabProps.renderContent()}
                   </View>
         )}

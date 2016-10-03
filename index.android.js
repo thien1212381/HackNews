@@ -11,22 +11,12 @@ import {
   Text,
   View,
   Navigator,
-  BackAndroid
+  ToolbarAndroid,
+  WebView
 } from 'react-native';
 
 import Dashboard from './App/View/Dashboard/index.android.js';
 import Post from './App/View/Post/index.android.js';
-var _navigator;
-
-
-BackAndroid.addEventListener('hardwareBackPress', () => {
-  console.log(_navigator.getCurrentRoutes().length);
-  if (_navigator.getCurrentRoutes().length === 1  ) {
-     return false;
-  }
-  _navigator.pop();
-  return true;
-});
 
 
 class HackerNews extends Component {
@@ -40,12 +30,20 @@ class HackerNews extends Component {
     );
   }
   navigatorRenderScene(route,navigator) {
-    _navigator = navigator;
     switch (route.id) {
       case 'Dashboard': return <Dashboard navigator={navigator}/>
-      case 'Post' : return <Post />
-      default: return (<View><Text>Nothing</Text></View>)
-
+      case 'Post' : return <Post navigator={navigator} title={route.title} post={route.post}/>
+      case 'Web': return (
+            <View style={{flex: 1}}>
+                <ToolbarAndroid style={styles.toolbar}
+                                title={route.title}
+                                navIcon={{uri: "ic_arrow_back_white_24dp", isStatic: true}}
+                                onIconClicked={navigator.pop}
+                                titleColor={'#FFFFFF'}/>
+                <WebView source={{uri: route.url}}
+                         javaScriptEnabled={true}/>
+            </View>
+          );
     }
   }
 }
@@ -54,6 +52,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F6F6EF',
+  },
+  toolbar: {
+    height: 56,
+    backgroundColor: '#FF6600'
   }
 });
 
